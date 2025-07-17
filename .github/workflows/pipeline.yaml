@@ -11,28 +11,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ✅ Checkout your code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # ✅ Setup Node.js for React build
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # ✅ Setup Java 17 (needed for Sonar scanner)
       - name: Setup Java 17 ☕🔥
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      # ✅ Install React dependencies
       - name: Install dependencies 📦
         run: npm install
 
+      # ✅ Build React app
       - name: Build React app ⚛️
         run: npm run build
 
-      - name: SonarQube Scan 🔍
-        uses: SonarSource/sonarqube-scan-action@v1.2.0
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # ✅ Run SonarQube Scanner CLI
+      - name: SonarQube Scan 🔍🚀
+        run: |
+          echo "📦 Downloading SonarScanner CLI..."
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+          export PATH="$PATH:$(pwd)/sonar-scanner-5.0.1.3006-linux/bin"
+          echo "⚡ Running Sonar Scanner..."
+          sonar-scanner \
+            -Dsonar.projectKey=your-project-key \
+            -Dsonar.sources=src \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
