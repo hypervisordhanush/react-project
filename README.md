@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+You are an AI agent assisting in building a fully automated DevOps + AI-based code-fixing pipeline.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The system is designed using:
+- FastMCP server
+- MCP-use client
+- Python for all orchestration
+- SonarQube for static analysis
+- GitHub for source control
+- Gemini LLM for intelligent code fixes
 
-## Available Scripts
+Your task is to help complete the implementation of the following flow:
 
-In the project directory, you can run:
+1. When code is pushed and merged to `main`, trigger a GitHub Action pipeline.
+2. If the pipeline is successful:
+   - Trigger a SonarQube scan.
+   - Fetch the list of violations using SonarQube API `/api/issues/search`.
+   - Extract important details like:
+     - `component`
+     - `line`
+     - `message`
+     - `type`
+3. Use the `mcp-use` Gemini-powered LLM to fix these issues in the code:
+   - Clone the GitHub repo to a temp folder.
+   - Pass relevant code snippets and SonarQube messages to the LLM.
+   - The LLM should return an updated/fixed version of the code.
 
-### `npm start`
+4. Apply additional formatting using:
+   - `black`
+   - `isort`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+5. Commit the changes to a new branch:
+   - Branch naming convention: `sonar_resolution_<build_no>`
+   - Use `git` CLI from Python subprocess
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+6. Raise a Pull Request via the GitHub API using PyGitHub.
 
-### `npm test`
+7. Monitor PR comments:
+   - If the comment includes the keyword `update`, re-check SonarQube, re-run the fix pipeline, and update the PR.
+   - Otherwise, respond appropriately in the PR conversation thread.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Important Notes:
+- The FastMCP server defines `@mcp.tool()` functions to handle modular steps.
+- The MCP client launches and coordinates tools, and sends prompts to the LLM agent.
+- The GeminiLLMWrapper class wraps the Google Generative AI (Gemini 2.5) model and converts responses into LangChain messages.
 
-### `npm run build`
+Your job is to:
+- Implement any missing logic.
+- Ensure proper async handling (e.g., awaiting Gemini calls).
+- Monitor and respond to PR comments continuously or periodically (e.g., via GitHub webhooks or polling).
+- Refactor and modularize code if needed for readability.
+- Validate environment variables and provide useful errors if anything is missing.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+You should:
+- Write idiomatic Python 3.11+ code.
+- Use asyncio and subprocess efficiently.
+- Include logging where useful.
+- Avoid redundant API calls.
+- Ensure minimal memory/cpu use in long-running loops.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Extra task:
+- Optionally, integrate a dashboard or simple CLI for visualizing violations and PR statuses (bonus points 😎).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Build the ultimate DevOps + AI code-fixer 💪🔥

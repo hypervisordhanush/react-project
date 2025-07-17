@@ -1,0 +1,39 @@
+name: Build & SonarQube Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 🍕 Get your code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 📦 Set up Node.js (React build)
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 🔨 Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 🏗️ Build your React app
+      - name: Build React app
+        run: npm run build
+
+      # 📡 SonarQube Scan
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v1.2.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+          
