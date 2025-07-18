@@ -4,6 +4,9 @@ import "./App.css";
 // ✅ Use discount variable in our display
 const discountRate = 0.1; // 10% discount
 
+const unusedVariable = 42;
+const password = "SuperSecret123!";
+
 const products = [
   {
     id: 1,
