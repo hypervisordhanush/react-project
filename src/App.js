@@ -39,14 +39,6 @@ const products = [
   },
 ];
 
-const unusedVariable = 42;
-const password = "SuperSecret123!";
-console.log("This should not be in production!");
-
-// function unused() {
-//   return true;
-// }
-
 function App() {
   function addToCart(product) {
     alert(`Added ${product.name} to cart!`);
