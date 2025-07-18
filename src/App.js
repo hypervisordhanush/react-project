@@ -8,7 +8,7 @@ const products = [
   {
     id: 1,
     name: "Wireless Headphones",
-    price: 99.99,
+    price: 99.98,
     image:
       "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MQTQ3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1687660671363",
     desc: "High quality wireless headphones.",
