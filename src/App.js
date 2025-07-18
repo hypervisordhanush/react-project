@@ -39,6 +39,10 @@ const products = [
   },
 ];
 
+// function unused() {
+//   return true;
+// }
+
 function App() {
   function addToCart(product) {
     alert(`Added ${product.name} to cart!`);
