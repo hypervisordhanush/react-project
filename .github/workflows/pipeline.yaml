@@ -35,6 +35,8 @@ jobs:
       # ✅ Build React app
       - name: Build React app ⚛️
         run: npm run build
+        env:
+          SKIP_PREFLIGHT_CHECK: true
 
       # ✅ Run SonarQube Scanner CLI
       - name: SonarQube Scan 🔍🚀
